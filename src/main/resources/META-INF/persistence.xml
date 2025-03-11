@@ -17,7 +17,7 @@
 
             <!-- Generación del esquema: en desarrollo puedes usar create-drop o update -->
             <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
         </properties>
 
 

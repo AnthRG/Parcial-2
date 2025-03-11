@@ -33,8 +33,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-        String mensaje = "Software ORM - JPA";
-        System.out.println(mensaje);
         if (args.length >= 1) {
             modoConexion = args[0];
             System.out.println("Modo de Operacion: " + modoConexion);
@@ -48,7 +46,7 @@ public class Main {
 
         TemplateEngine templateEngine = new TemplateEngine();
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setPrefix("templates/");  // ⚠️ SIN la barra inicial "/templates/"
+        resolver.setPrefix("templates/");  // SIN la barra inicial "/templates/"
         resolver.setSuffix(".html");
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setCacheable(false);
@@ -69,6 +67,16 @@ public class Main {
                     post("/editar", CrudUsuarioController::procesarEditarUsuario);
                     ApiBuilder.get("/eliminar/{username}", CrudUsuarioController::eliminarUsuario);
                 });
+
+                ApiBuilder.path("/crud-estudiante", () -> {
+                    ApiBuilder.get("/", EstudianteCrudController::listar);
+                    ApiBuilder.get("/crear", EstudianteCrudController::crearEstudianteForm);
+                    post("/crear", EstudianteCrudController::procesarCreacionEstudiante);
+
+
+                });
+
+
                 path("/fotos", () -> {
                     get(ctx -> {
                         ctx.redirect("/fotos/listar");
@@ -113,7 +121,8 @@ public class Main {
             ctx.redirect("/formulario");
         });
 
-        app.before("/crud-*", ctx -> {
+        //filtros are down for trials
+        /*app.before("/crud-*", ctx -> {
             if (!SessionCheckAutor(ctx)) {
                 ctx.redirect("/");
             }
@@ -129,7 +138,8 @@ public class Main {
             if (!SessionCheckAdmin(ctx)) {
                 ctx.redirect("/");
             }
-        });
+        });*/
+
         if (UsuarioServices.getInstance().findAll().isEmpty()) {
             startDB();
             System.out.println("Usuarios no encontrados");
