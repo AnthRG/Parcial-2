@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    async function cargarArticulos(cantidad) {
+      const response = await fetch(`/articulos?cantidad=${cantidad}`);
+      const articulos = await response.json();
+
+      const contenedor = document.getElementById('articulos');
+      contenedor.innerHTML = ''; // Limpiar el contenedor
+
+      articulos.forEach(articulo => {
+        const articuloHTML = `
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                        <h3 class="text-xl font-bold">${articulo.titulo}</h3>
+                        <p class="text-gray-600">${articulo.cuerpo}</p>
+                    </div>
+                `;
+        contenedor.innerHTML += articuloHTML;
+      });
+    }
+
+    // Cargar 2 artículos por defecto
+    document.addEventListener('DOMContentLoaded', () => cargarArticulos(2));
+  </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+  <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">Log in</h2>
+  <form action="/autenticar" method="POST" class="space-y-4">
+    <div>
+      <label class="block text-gray-600">Usuario</label>
+      <input type="text" name="usuario" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+    </div>
+    <div>
+      <label class="block text-gray-600">Contraseña</label>
+      <input type="password" name="password" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+    </div>
+    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Entrar</button>
+  </form>
+  <p class="text-center mt-4 text-gray-600">
+    ¿No estás registrado? <a href="/registro.html" class="text-blue-500 hover:underline">Regístrate aquí</a>
+  </p>
+
+  <!-- Contenedor para los artículos -->
+  <div id="articulos" class="mt-6"></div>
+
+  <!-- Botones para mostrar más o menos artículos -->
+  <div class="flex justify-between mt-4">
+    <button onclick="cargarArticulos(2)" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Mostrar 2</button>
+    <button onclick="cargarArticulos(5)" class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600">Mostrar 5</button>
+  </div>
+</div>
+</body>
+</html>

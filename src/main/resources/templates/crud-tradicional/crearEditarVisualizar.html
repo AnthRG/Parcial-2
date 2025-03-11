@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/crud-tradicional/plantilla.html::head">
+    <title th:text="${titulo}">...</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4" th:text="${titulo}">....</h1>
+    </div>
+
+    <!-- El endpoint que estará procesando el formulario será enviado por el controlador -->
+    <form enctype="multipart/form-data" method="post"th:action="@{${accion}}">
+        <div class="form-group">
+            <label for="usernameForm">Username</label>
+            <input th:readonly="${editaruser}" th:value="${usuario} ? ${usuario.username} : ''" type="text"
+                   name="username" class="form-control" id="usernameForm">
+        </div>
+        <div class="form-group">
+            <label for="nombreForm">Nombre</label>
+            <input th:readonly="${visualizar}" th:value="${usuario} ? ${usuario.nombre} : ''" type="text" name="nombre"
+                   class="form-control" id="nombreForm">
+        </div>
+        <div class="form-group">
+            <label for="passwordForm">Contraseña</label>
+            <input th:readonly="${visualizar}" th:value="${usuario} ? ${usuario.password} : ''" type="password"
+                   name="password" class="form-control" id="passwordForm">
+        </div>
+        <div class="form-group">
+            <label>Roles</label><br>
+            <input th:readonly="${visualizar}" type="checkbox" name="administrador"
+                   th:checked="${usuario != null} ? ${usuario.administrador} : false"> Administrador<br>
+            <input th:readonly="${visualizar}" type="checkbox" name="autor"
+                   th:checked="${usuario != null} ? ${usuario.autor} : false"> Autor
+        </div>
+        <div class="form-group">
+            <label for="fotoForm">Foto de Perfil</label>
+            <input th:disabled="${visualizar}" type="file" name="foto" class="form-control" id="fotoForm" accept=".jpg, .png, .jpeg">
+        </div>
+        <div class="form-group" >
+            <img th:if="${usuario} ? ${usuario.foto != null}"
+                 th:src="'data:' + ${usuario.foto.mimeType} + ';base64,' + ${usuario.foto.fotoBase64}" alt="Foto de perfil" style="width: 50px; height: 50px; border-radius: 50%;"/>
+            <small th:if="${usuario} ? ${usuario.foto != null}" id="fotoHelp" class="form-text text-muted">Imagen actual</small>
+
+            <span th:unless="${usuario} ? ${usuario.foto != null}"></span>
+
+        </div>
+
+
+        <!-- Botones para la creación del usuario -->
+        <button th:if="${!visualizar}" type="submit" class="btn btn-primary">Summit</button>
+        <a href="/crud-simple/" class="btn btn-primary">Cancelar</a>
+    </form>
+</div>
+
+<!-- incluyendo la parte de javascript del template -->
+<div th:replace="/crud-tradicional/plantilla.html::javascript"></div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+CREATE TABLE Usuario (
+                         username VARCHAR(255) PRIMARY KEY,
+                         nombre VARCHAR(255) NOT NULL,
+                         password VARCHAR(255) NOT NULL,
+                         administrador BOOLEAN NOT NULL,
+                         autor BOOLEAN NOT NULL
+);
+
+CREATE TABLE Articulo (
+                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          titulo VARCHAR(255) NOT NULL,
+                          cuerpo TEXT NOT NULL,
+                          fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          autor_username VARCHAR(255),
+                          FOREIGN KEY (autor_username) REFERENCES Usuario(username) ON DELETE SET NULL
+);
+
+CREATE TABLE Comentario (
+                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            contenido TEXT NOT NULL,
+                            autor_username VARCHAR(255),
+                            articulo_id BIGINT,
+                            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            FOREIGN KEY (autor_username) REFERENCES Usuario(username) ON DELETE SET NULL,
+                            FOREIGN KEY (articulo_id) REFERENCES Articulo(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Etiqueta (
+                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          etiqueta VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE Articulo_Etiqueta (
+                                   articulo_id BIGINT,
+                                   etiqueta_id BIGINT,
+                                   PRIMARY KEY (articulo_id, etiqueta_id),
+                                   FOREIGN KEY (articulo_id) REFERENCES Articulo(id) ON DELETE CASCADE,
+                                   FOREIGN KEY (etiqueta_id) REFERENCES Etiqueta(id) ON DELETE CASCADE
+);
