@@ -1,73 +1,155 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Listado de Estudiantes</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- FontAwesome para iconos -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <!-- Estilos personalizados -->
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: none;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    .card-header {
-      background-color: #007bff;
-      color: white;
-      font-weight: bold;
-      text-align: center;
-    }
-    .card-body {
-      background-color: white;
-    }
-    .btn-custom {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      transition: background-color 0.3s ease;
-    }
-    .btn-custom:hover {
-      background-color: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Listado de Estudiantes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <style>
+
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .card-body {
+            background-color: white;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <style>
+        /* Mantener estilos anteriores y agregar estos */
+        .hero-header {
+            background: linear-gradient(135deg, #007bff, #00ff88);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-header:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .header-title {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 60px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+        }
+    </style>
+
 </head>
 <body>
 <div class="container mt-4">
-  <h1 class="text-center mb-4" th:text="${titulo}">Listado de Estudiantes</h1>
-  <div class="row">
-    <!-- Iterar sobre la lista de estudiantes -->
-    <div class="col-md-4 mb-4" th:each="estudiante : ${estudiantes}">
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-user-alt"></i> Persona
+    <!-- Header Mejorado -->
+    <div class="hero-header">
+        <div class="title-wrapper">
+            <i class="fas fa-users header-icon"></i>
+            <h1 class="header-title" th:text="${titulo}">Listado de Encuestado</h1>
         </div>
-        <div class="card-body">
-          <h5 class="card-title" th:text="${estudiante.nombre}"></h5>
-          <p class="card-text">
-            <strong>Sector:</strong> <span th:text="${estudiante.sector}"></span><br>
-            <strong>Nivel Escolar:</strong> <span th:text="${estudiante.nivelEscolar}"></span>
-          </p>
-          <a href="#" class="btn btn-custom btn-block">
-            <i class="fas fa-info-circle"></i> Ver Detalles
-          </a>
+        <!-- Opcional: Puedes agregar más elementos aquí -->
+        <div class="text-center mt-3">
+      <span class="badge badge-pill badge-light">
+        <i class="fas fa-user-graduate mr-2"></i>
+        Total de estudiantes: <span th:text="${#lists.size(estudiantes)}">0</span>
+      </span>
         </div>
-      </div>
     </div>
-  </div>
+    <div class="row">
+        <!-- Iterar sobre la lista de estudiantes -->
+        <div class="col-md-4 mb-4" th:each="estudiante : ${estudiantes}">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-alt"></i> Persona
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${estudiante.nombre}"></h5>
+                    <p class="card-text">
+                        <strong>Sector:</strong> <span th:text="${estudiante.sector}"></span><br>
+                        <strong>Nivel Escolar:</strong> <span th:text="${estudiante.nivelEscolar}"></span>
+                    </p>
+                    <a href="#" class="btn btn-custom btn-block">
+                        <i class="fas fa-info-circle"></i> Ver Detalles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Optional JavaScript -->

@@ -15,7 +15,7 @@ public class EstudianteCrudController {
     public static void listar(@NotNull Context ctx) throws Exception {
         List<Estudiante> lista = EstudianteServices.getInstance().findAll();
         Map<String, Object> modelo = new HashMap<>();
-        modelo.put("titulo", "Listado de Estudiantes");
+        modelo.put("titulo", "Encuestados");
         modelo.put("estudiantes", lista);
         ctx.render("/crud-tradicional/listarEstudiante.html", modelo);
     }
@@ -32,8 +32,17 @@ public class EstudianteCrudController {
         String sector = ctx.formParam("sector");
         String nivelEscolar = ctx.formParam("nivelEscolar");
         Usuario user = ctx.sessionAttribute("USUARIO");
+        double latitud = 0;
+        double longitud = 0;
+        try{
+            latitud = Double.parseDouble(ctx.formParam("latitud"));
+            longitud = Double.parseDouble(ctx.formParam("longitud"));
 
-        Estudiante estudiante = new Estudiante(nombre, sector, nivelEscolar, user);
+        }catch(Exception e){
+            System.out.println("No tienen ubicacion activada");
+        }
+
+        Estudiante estudiante = new Estudiante(nombre, sector, nivelEscolar, user, longitud, latitud);
         EstudianteServices.getInstance().crear(estudiante);
         ctx.redirect("/crud-estudiante/");
     }

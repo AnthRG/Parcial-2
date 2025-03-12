@@ -17,15 +17,20 @@ public class Estudiante {
     @JoinColumn(name = "autor_username")
     private Usuario user;
 
+    private Double longitud;
+    private Double latitud;
+
     public Estudiante() {
 
     }
 
-    public Estudiante(String nombre, String sector, String nivelEscolar, Usuario user) {
+    public Estudiante(String nombre, String sector, String nivelEscolar, Usuario user, Double longitud, Double latitud) {
         this.nombre = nombre;
         this.sector = sector;
         this.nivelEscolar = nivelEscolar;
         this.user = user;
+        this.longitud = longitud;
+        this.latitud = latitud;
     }
 
     // Getters y Setters
@@ -59,5 +64,21 @@ public class Estudiante {
 
     public void setUser(Usuario user) {
         this.user = user;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
     }
 }

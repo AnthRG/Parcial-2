@@ -85,6 +85,8 @@
       <i class="fas fa-graduation-cap"></i>
       <input type="text" class="form-control" id="nivelEscolar" name="nivelEscolar" placeholder="Nivel Escolar" required>
     </div>
+    <input type="hidden" name="latitud" id="latitud">
+    <input type="hidden" name="longitud" id="longitud">
     <!-- Botón de Envío -->
     <button type="submit" class="btn btn-custom">
       <i class="fas fa-save"></i> Guardar Estudiante
@@ -97,5 +99,21 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+              position => {
+                document.getElementById('latitud').value = position.coords.latitude;
+                document.getElementById('longitud').value = position.coords.longitude;
+              },
+              error => {
+                console.error("Error obteniendo ubicación: ", error);
+              }
+      );
+    }
+  }
+</script>
 </body>
 </html>
