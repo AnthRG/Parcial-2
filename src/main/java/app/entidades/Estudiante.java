@@ -81,4 +81,12 @@ public class Estudiante {
     public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

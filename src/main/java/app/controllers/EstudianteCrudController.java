@@ -13,9 +13,18 @@ import java.util.Map;
 
 public class EstudianteCrudController {
     public static void listar(@NotNull Context ctx) throws Exception {
-        List<Estudiante> lista = EstudianteServices.getInstance().findAll();
+        int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+        int size = ctx.queryParamAsClass("size", Integer.class).getOrDefault(5);
+
+        List<Estudiante> lista = EstudianteServices.getInstance().findAllPaginated(page, size);
+        long totalEstudiantes = EstudianteServices.getInstance().countEstudiantes();
+        int totalPages = (int) Math.ceil((double) totalEstudiantes / size);
+
         Map<String, Object> modelo = new HashMap<>();
         modelo.put("titulo", "Encuestados");
+        ctx.attribute("currentPage", page);
+        ctx.attribute("totalPages", totalPages);
+
         modelo.put("estudiantes", lista);
         ctx.render("/crud-tradicional/listarEstudiante.html", modelo);
     }

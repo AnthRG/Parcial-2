@@ -4,6 +4,8 @@ import app.entidades.Estudiante;
 import app.entidades.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import org.h2.mvstore.Page;
+import org.hibernate.Session;
 
 import java.util.List;
 
@@ -25,5 +27,21 @@ public class EstudianteServices extends GestionDb<Estudiante>{
         query.setParameter("nivelEscolar", nivelEscolar + "%");
         return query.getResultList();
     }
+
+    public List<Estudiante> findAllPaginated(int page, int size) {
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("SELECT e FROM Estudiante e");
+        query.setFirstResult((page - 1) * size);
+        query.setMaxResults(size);
+        return query.getResultList();
+    }
+
+    public long countEstudiantes() {
+        EntityManager em = getEntityManager();
+        Query query = em.createQuery("SELECT COUNT(e) FROM Estudiante e");
+        return (long) query.getSingleResult();
+    }
+
+
 
 }
