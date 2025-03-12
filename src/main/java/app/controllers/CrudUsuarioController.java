@@ -64,7 +64,7 @@ public class CrudUsuarioController {
 
         Usuario usuario = new Usuario(username, nombre, password, administrador, autor, foto);
         UsuarioServices.getInstance().crear(usuario);
-        ctx.redirect("/crud-simple/");
+        ctx.redirect("/crud-simple/crear");
     }
 
     public static void visualizarUsuario(@NotNull Context ctx) throws Exception {
