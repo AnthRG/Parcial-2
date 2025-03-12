@@ -216,10 +216,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Aquí puedes mostrar los detalles del estudiante -->
                 <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
                 <p><strong>Sector:</strong> <span id="modalSector"></span></p>
                 <p><strong>Nivel Escolar:</strong> <span id="modalNivelEscolar"></span></p>
+                <p><strong>Ubicación:</strong></p>
+                <div id="mapaEstudiante" style="width: 100%; height: 300px;"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -227,6 +228,7 @@
         </div>
     </div>
 </div>
+
 <div class="d-flex justify-content-center mt-4">
     <ul class="pagination pagination-dark">
         <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
@@ -239,7 +241,7 @@
         </li>
         <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
             <a class="page-link btn-custom" th:href="@{/crud-estudiante(page=${currentPage + 1}, size=${size})}">
-                 <i class="fas fa-chevron-right"></i>
+                <i class="fas fa-chevron-right"></i>
             </a>
         </li>
     </ul>
@@ -270,5 +272,41 @@
         $('#modalNivelEscolar').text(nivelEscolar);
     });
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=TU_CLAVE_API"></script>
+<script>
+    function cargarMapa(lat, lng) {
+        var map = new google.maps.Map(document.getElementById('mapaEstudiante'), {
+            center: { lat: lat, lng: lng },
+            zoom: 14
+        });
+
+        new google.maps.Marker({
+            position: { lat: lat, lng: lng },
+            map: map,
+            title: "Ubicación del Encuestado"
+        });
+    }
+
+    $('#detallesModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const estudianteId = button.data('estudiante-id');
+        const nombre = button.closest('.card').find('.card-title').text();
+        const sector = button.closest('.card').find('span').eq(0).text();
+        const nivelEscolar = button.closest('.card').find('span').eq(1).text();
+
+        // Aquí haríamos una petición AJAX para obtener los datos del estudiante
+        fetch(/api/estudiantes/${estudianteId})
+            .then(response => response.json())
+            .then(data => {
+                $('#modalNombre').text(data.nombre);
+                $('#modalSector').text(data.sector);
+                $('#modalNivelEscolar').text(data.nivelEscolar);
+                cargarMapa(data.latitud, data.longitud);
+            })
+            .catch(error => console.error('Error cargando datos:', error));
+    });
+</script>
+
 </body>
 </html>
