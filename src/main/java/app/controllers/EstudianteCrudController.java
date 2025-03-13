@@ -55,4 +55,21 @@ public class EstudianteCrudController {
         EstudianteServices.getInstance().crear(estudiante);
         ctx.redirect("/crud-estudiante/");
     }
+
+    public static void listarUbicaciones(@NotNull Context ctx) throws Exception {
+        List<Estudiante> lista = EstudianteServices.getInstance().findAll();
+
+        ctx.json(lista); // Devuelve la lista en formato JSON
+    }
+    public static void obtenerEstudiante(@NotNull Context ctx) {
+        long id = ctx.pathParamAsClass("id", Long.class).get();
+        Estudiante estudiante = EstudianteServices.getInstance().find(id);
+
+        if (estudiante != null) {
+            ctx.json(estudiante);
+        } else {
+            ctx.status(404).result("Estudiante no encontrado");
+        }
+    }
+
 }

@@ -83,6 +83,12 @@ public class Main {
 
                 });
 
+                ApiBuilder.path("/api", () -> {
+                    ApiBuilder.get("/estudiantes", EstudianteCrudController::listarUbicaciones);
+                    ApiBuilder.get("/estudiantes/{id}", EstudianteCrudController::obtenerEstudiante);
+                });
+
+
 
                 path("/fotos", () -> {
                     get(ctx -> {
