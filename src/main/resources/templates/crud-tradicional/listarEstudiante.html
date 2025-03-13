@@ -272,7 +272,6 @@
         $('#modalNivelEscolar').text(nivelEscolar);
     });
 </script>
-
 <script>
     function inicializarMapa() {
         console.log("Google Maps cargado correctamente");
@@ -289,10 +288,15 @@
             zoom: 14
         });
 
-        new google.maps.marker.AdvancedMarkerElement({
+        // Crear un marcador con un ícono personalizado
+        new google.maps.Marker({
             position: { lat: lat, lng: lng },
             map: map,
-            title: "Ubicación del Encuestado"
+            title: "Ubicación del Encuestado",
+            icon: {
+                url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png", // URL del ícono personalizado
+                scaledSize: new google.maps.Size(40, 40) // Tamaño del ícono
+            }
         });
     }
 
@@ -313,7 +317,6 @@
 </script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9pfET0BwGbSpxr2o9Gy2wDk-kFHLVnvE&callback=inicializarMapa"></script>
-
 
 </body>
 </html>
