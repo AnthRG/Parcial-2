@@ -53,7 +53,7 @@ public class EstudianteCrudController {
 
         Estudiante estudiante = new Estudiante(nombre, sector, nivelEscolar, user, longitud, latitud);
         EstudianteServices.getInstance().crear(estudiante);
-        ctx.redirect("/crud-estudiante/");
+        ctx.redirect("/crud-estudiante/crear");
     }
 
     public static void listarUbicaciones(@NotNull Context ctx) throws Exception {

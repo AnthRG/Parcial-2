@@ -33,45 +33,7 @@
 <div th:fragment="cuerpo">
 
 </div>
-
-<div th:fragment="header"><div th:fragment="header">
-    <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-            <div class="col-4 pt-1">
-                <a class="btn btn-sm btn-outline-secondary" href="http://localhost:7070/menu">Menu</a>
-            </div>
-            <div class="col-4 text-center">
-                <a class="blog-header-logo text-dark">Mi Blog</a>
-            </div>
-            <div class="col-4 d-flex justify-content-end align-items-center">
-                <span>
-                    <span th:text="'Bienvenido, '+${session.USUARIO.nombre}"></span>
-                    <a class="btn btn-sm btn-outline-danger ms-2" href="http://localhost:7070/logout">Cerrar sesión</a>
-                </span>
-            </div>
-
-        </div>
-    </header>
-</div></div>
 <body>
-
-<div th:fragment="buttons">
-    <main class="container main-content">
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <a href="http://localhost:7070/blog/" class="btn btn-primary btn-custom">Blog</a>
-            </div>
-            <div class="col-auto">
-                <a href="http://localhost:7070/crud-articulo" class="btn btn-primary btn-custom">CRUD Artículos</a>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-3">
-            <div class="col-auto">
-                <a href="http://localhost:7070/crud-simple" class="btn btn-primary btn-custom">CRUD Usuario</a>
-            </div>
-        </div>
-    </main>
-</div>
 
 <div th:fragment="javascript">
     <!-- Optional JavaScript -->

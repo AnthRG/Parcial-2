@@ -27,7 +27,7 @@ public class CrudUsuarioController {
 
     public static void crearUsuarioForm(@NotNull Context ctx) throws Exception {
         Map<String, Object> modelo = new HashMap<>();
-        modelo.put("titulo", "Formulario Creación Usuario");
+        modelo.put("titulo", "Creación Usuario");
         modelo.put("accion", "/crud-simple/crear");
         ctx.render("/crud-tradicional/crearEditarVisualizar.html", modelo);
     }
@@ -64,13 +64,13 @@ public class CrudUsuarioController {
 
         Usuario usuario = new Usuario(username, nombre, password, administrador, autor, foto);
         UsuarioServices.getInstance().crear(usuario);
-        ctx.redirect("/crud-simple/crear");
+        ctx.redirect("/crud-simple/");
     }
 
     public static void visualizarUsuario(@NotNull Context ctx) throws Exception {
         Usuario usuario = UsuarioServices.getInstance().find(ctx.pathParam("username"));
         Map<String, Object> modelo = new HashMap<>();
-        modelo.put("titulo", "Formulario Visualizar Usuario " + usuario.getUsername());
+        modelo.put("titulo", "Lista de Usuarios" + usuario.getUsername());
         modelo.put("usuario", usuario);
         modelo.put("visualizar", true);
         modelo.put("editaruser", true);
@@ -81,7 +81,7 @@ public class CrudUsuarioController {
     public static void editarUsuarioForm(@NotNull Context ctx) throws Exception {
         Usuario usuario = UsuarioServices.getInstance().find(ctx.pathParam("username"));
         Map<String, Object> modelo = new HashMap<>();
-        modelo.put("titulo", "Formulario Editar Usuario " + usuario.getUsername());
+        modelo.put("titulo", "Edicion de Usuario" + usuario.getUsername());
         modelo.put("usuario", usuario);
         modelo.put("editaruser", true);
         modelo.put("accion", "/crud-simple/editar");
@@ -103,21 +103,17 @@ public class CrudUsuarioController {
         if(autorcheck != null){
             autor = true;
         }
-
-        Foto foto = null;
-        Foto oldfoto = null;
-        Boolean FotoSubida = false;
+        Usuario user = UsuarioServices.getInstance().find(username);
+        Foto foto = user.getFoto();
 
         try{
             UploadedFile uploadedFile = ctx.uploadedFile("foto");
-            if (uploadedFile != null) {
+            if (uploadedFile != null && uploadedFile.content().available() > 0) {
+                System.out.println("yes?");
                 byte[] bytes = uploadedFile.content().readAllBytes();
                 String encodedString = Base64.getEncoder().encodeToString(bytes);
                 foto = new Foto(uploadedFile.filename(), uploadedFile.contentType(), encodedString);
                 FotoServices.getInstancia().crear(foto);
-                Usuario CurrentUser = UsuarioServices.getInstance().find(username);
-                oldfoto = CurrentUser.getFoto();
-                FotoSubida = true;
             }
         }catch (Exception e){
             System.out.println("error");
@@ -125,20 +121,15 @@ public class CrudUsuarioController {
 
         Usuario temp = new Usuario(username, nombre, password, administrador, autor, foto);
         UsuarioServices.getInstance().editar(temp);
-        try{
-            if (oldfoto != null && FotoSubida) {
-                //FotoServices.getInstancia().eliminar(oldfoto.getId());
-            }
-        }catch (Exception e){
-            System.out.println("aint old foto working");
-        }
         ctx.redirect("/crud-simple/");
     }
 
     public static void eliminarUsuario(@NotNull Context ctx) throws Exception {
         Usuario usuario = UsuarioServices.getInstance().find(ctx.pathParam("username"));
         UsuarioServices.getInstance().eliminar(ctx.pathParam("username"));
-        FotoServices.getInstancia().eliminar(usuario.getFoto().getId());
+        try{
+            FotoServices.getInstancia().eliminar(usuario.getFoto().getId());
+        }catch (Exception e){}
         ctx.redirect("/crud-simple/");
     }
 }

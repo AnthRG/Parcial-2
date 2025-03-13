@@ -16,7 +16,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
             <!-- Generación del esquema: en desarrollo puedes usar create-drop o update -->
-            <property name="jakarta.persistence.schema-generation.database.action" value="create-drop"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
             <property name="hibernate.show_sql" value="false"/>
         </properties>
 
