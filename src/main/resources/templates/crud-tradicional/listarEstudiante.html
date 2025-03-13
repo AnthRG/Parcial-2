@@ -273,15 +273,23 @@
     });
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=TU_CLAVE_API"></script>
 <script>
+    function inicializarMapa() {
+        console.log("Google Maps cargado correctamente");
+    }
+
     function cargarMapa(lat, lng) {
+        if (!lat || !lng) {
+            console.error("No hay coordenadas válidas para este encuestado.");
+            return;
+        }
+
         var map = new google.maps.Map(document.getElementById('mapaEstudiante'), {
             center: { lat: lat, lng: lng },
             zoom: 14
         });
 
-        new google.maps.Marker({
+        new google.maps.marker.AdvancedMarkerElement({
             position: { lat: lat, lng: lng },
             map: map,
             title: "Ubicación del Encuestado"
@@ -291,12 +299,8 @@
     $('#detallesModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const estudianteId = button.data('estudiante-id');
-        const nombre = button.closest('.card').find('.card-title').text();
-        const sector = button.closest('.card').find('span').eq(0).text();
-        const nivelEscolar = button.closest('.card').find('span').eq(1).text();
 
-        // Aquí haríamos una petición AJAX para obtener los datos del estudiante
-        fetch(/api/estudiantes/${estudianteId})
+        fetch(`/api/estudiantes/${estudianteId}`) // 🔹 Se agregaron comillas invertidas (`` ` ``)
             .then(response => response.json())
             .then(data => {
                 $('#modalNombre').text(data.nombre);
@@ -307,6 +311,9 @@
             .catch(error => console.error('Error cargando datos:', error));
     });
 </script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9pfET0BwGbSpxr2o9Gy2wDk-kFHLVnvE&callback=inicializarMapa"></script>
+
 
 </body>
 </html>

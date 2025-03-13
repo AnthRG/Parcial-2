@@ -1,0 +1,3 @@
+2025-03-12 23:11:16 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select from[*]* Estudiante"; expected "identifier"; SQL statement:
+select from* Estudiante [42001-214]
