@@ -31,8 +31,8 @@
             <label>Roles</label><br>
             <input th:readonly="${visualizar}" type="checkbox" name="administrador"
                    th:checked="${usuario != null} ? ${usuario.administrador} : false"> Administrador<br>
-            <input th:readonly="${visualizar}" type="checkbox" name="autor"
-                   th:checked="${usuario != null} ? ${usuario.autor} : false"> Autor
+            <input th:readonly="${visualizar}" type="checkbox" name="encuestador"
+                   th:checked="${usuario != null} ? ${usuario.encuestador} : false"> Autor
         </div>
         <div class="form-group">
             <label for="fotoForm">Foto de Perfil</label>

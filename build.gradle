@@ -8,6 +8,11 @@ plugins {
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = '21'
+}
+
+
 repositories {
     mavenCentral()
 }

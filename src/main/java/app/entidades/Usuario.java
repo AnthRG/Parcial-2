@@ -1,7 +1,6 @@
 package app.entidades;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -13,28 +12,28 @@ public class Usuario implements Serializable {
     String nombre;
     String password;
     boolean administrador;
-    boolean autor;
+    boolean encuestador;
 
     @OneToOne
     Foto foto;
 
 
 
-    public Usuario(String username, String nombre, String password, boolean administrador, boolean autor) {
+    public Usuario(String username, String nombre, String password, boolean administrador, boolean encuestador) {
         this.username = username;
         this.nombre = nombre;
         this.password = password;
         this.administrador = administrador;
-        this.autor = autor;
+        this.encuestador = encuestador;
         this.foto = null;
     }
 
-    public Usuario(String username, String nombre, String password, boolean administrador, boolean autor, Foto foto) {
+    public Usuario(String username, String nombre, String password, boolean administrador, boolean encuestador, Foto foto) {
         this.username = username;
         this.nombre = nombre;
         this.password = password;
         this.administrador = administrador;
-        this.autor = autor;
+        this.encuestador = encuestador;
         this.foto = foto;
     }
 
@@ -84,11 +83,11 @@ public class Usuario implements Serializable {
         this.administrador = administrador;
     }
 
-    public boolean isAutor() {
-        return autor;
+    public boolean isEncuestador() {
+        return encuestador;
     }
 
-    public void setAutor(boolean autor) {
-        this.autor = autor;
+    public void setEncuestador(boolean encuestador) {
+        this.encuestador = encuestador;
     }
 }

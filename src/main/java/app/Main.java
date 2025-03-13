@@ -17,10 +17,15 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.Optional;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
+import io.javalin.websocket.WsContext;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+
 
 
 public class Main {
@@ -30,6 +35,7 @@ public class Main {
         ANONYMOUS,
         USER,
     }
+    private static Set<WsContext> wsClients = ConcurrentHashMap.newKeySet();
 
 
     public static void main(String[] args) {
@@ -37,6 +43,7 @@ public class Main {
             modoConexion = args[0];
             System.out.println("Modo de Operacion: " + modoConexion);
         }
+
 
         //Iniciando la base de datos.
         if (modoConexion.isEmpty()) {
@@ -54,7 +61,7 @@ public class Main {
 
         // Crear la aplicación Javalin con el motor de plantillas
         var app = Javalin.create(config -> {
-            //config.staticFiles.add("/publico"); // Archivos estáticos
+            config.staticFiles.add("/publico"); // Archivos estáticos
             config.fileRenderer(new JavalinThymeleaf(templateEngine)); // Configurar Thymeleaf
 
             config.router.apiBuilder(() -> {
@@ -86,9 +93,32 @@ public class Main {
                     get("/visualizar/{id}", FotoController::visualizarFotos);
                     get("/eliminar/{id}", FotoController::eliminarFotos);
                 });
+
             });
         }).start(7070);
 
+        app.ws("/websocket", ws -> {
+            ws.onConnect(ctx -> {
+                wsClients.add(ctx);
+                System.out.println("Cliente Conectado: "+ ctx.sessionId());
+
+            });
+
+            ws.onMessage(ctx -> {
+                System.out.println("Mensaje recibido: " + ctx.message());
+                // Reenviar el mensaje a todos los clientes conectados
+                wsClients.forEach(client -> client.send(ctx.message()));
+            });
+
+            ws.onClose(ctx -> {
+                wsClients.remove(ctx);
+                System.out.println("Cliente desconectado: ");
+            });
+
+            ws.onError(ctx -> {
+                System.out.println("Error en WebSocket: ");
+            });
+        });
 
         app.before(ctx -> {
             if (ctx.sessionAttribute("USUARIO") == null) { // Si no hay sesión activa
@@ -252,7 +282,7 @@ public class Main {
         Usuario user = ctx.sessionAttribute("USUARIO");
         if (user != null) {
             ctx.sessionAttribute("USUARIO", user);
-            if (user.isAutor() || user.isAdministrador()) {
+            if (user.isEncuestador() || user.isAdministrador()) {
                 return true;
             }
         }
