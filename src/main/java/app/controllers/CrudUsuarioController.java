@@ -51,16 +51,16 @@ public class CrudUsuarioController {
         }
 
         String admincheck = ctx.formParam("administrador");
-        String autorcheck = ctx.formParam("encuestador");
+        //String autorcheck = ctx.formParam("encuestador");
 
         boolean administrador = false;
-        boolean autor = false;
+        boolean autor = true;//always true
         if(admincheck != null){
             administrador = true;
         }
-        if(autorcheck != null){
+        /*if(autorcheck != null){
             autor = true;
-        }
+        }*/
 
         Usuario usuario = new Usuario(username, nombre, password, administrador, autor, foto);
         UsuarioServices.getInstance().crear(usuario);
@@ -93,16 +93,16 @@ public class CrudUsuarioController {
         String nombre = ctx.formParam("nombre");
         String password = ctx.formParam("password");
         String admincheck = ctx.formParam("administrador");
-        String autorcheck = ctx.formParam("encuestador");
+        //String autorcheck = ctx.formParam("encuestador");
 
         boolean administrador = false;
-        boolean autor = false;
+        boolean autor = true; //always true
         if(admincheck != null){
             administrador = true;
         }
-        if(autorcheck != null){
+        /*if(autorcheck != null){
             autor = true;
-        }
+        }*/
         Usuario user = UsuarioServices.getInstance().find(username);
         Foto foto = user.getFoto();
 

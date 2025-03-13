@@ -24,8 +24,7 @@ import io.javalin.websocket.WsContext;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-
+import java.util.logging.Level;
 
 
 public class Main {
@@ -39,6 +38,8 @@ public class Main {
 
 
     public static void main(String[] args) {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+
         if (args.length >= 1) {
             modoConexion = args[0];
             System.out.println("Modo de Operacion: " + modoConexion);
