@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registros Pendientes</title>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
@@ -35,15 +36,20 @@
         }
 
         .btn-custom:hover {
+            color: white;
             background-color: #1a1a40;
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(+5px); }
-            50% { transform: translateY(-5px); }
+            0%, 100% {
+                transform: translateY(+5px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
         }
 
-        .fa-sync {
+        .ffa-sync {
             animation: bounce 2s infinite;
         }
     </style>
@@ -55,7 +61,7 @@
     <div class="data-container mb-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2><i class="fas fa-users-class fa-sync"></i> Estudiantes Pendientes</h2>
+                <h2><i class="fas fa-users-class ffa-sync fa-sync"></i> Estudiantes Pendientes</h2>
                 <p class="lead text-muted">Registros locales no sincronizados</p>
             </div>
             <button class="btn btn-custom" onclick="loadPendingRecordsDashboard()">
@@ -78,100 +84,13 @@
         </div>
     </div>
 
-    <!-- Sección de Usuarios Pendientes -->
-    <div class="data-container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2><i class="fas fa-user-clock fa-sync"></i> Usuarios Pendientes</h2>
-                <p class="lead text-muted">Registros locales no sincronizados</p>
-            </div>
-            <button class="btn btn-custom" onclick="loadPendingRecordsDashboard()">
-                <i class="fas fa-sync"></i> Actualizar
-            </button>
-        </div>
 
-        <div class="table-responsive">
-            <table class="table table-hover table-borderless">
-                <thead class="thead-light">
-                <tr>
-                    <th>Usuario</th>
-                    <th>Nombre</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody id="pendingUsersList"></tbody>
-            </table>
-        </div>
-    </div>
 </div>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
-<script>
-    // Función modificada para crear filas de tabla
-    function loadPendingRecordsDashboard() {
-        // Estudiantes
-        localforage.getItem('surveyData').then(students => {
-            students = students || [];
-            const tbody = document.getElementById('pendingStudentsList');
-            tbody.innerHTML = '';
 
-            students.forEach((student, index) => {
-                const row = `
-                    <tr>
-                        <td>${student.nombre}</td>
-                        <td>${student.sector}</td>
-                        <td>${student.nivelEscolar}</td>
-                        <td>
-                            <button onclick="sendPendingStudent(${index})" class="btn btn-success btn-sm">
-                                <i class="fas fa-cloud-upload-alt"></i> Enviar
-                            </button>
-                            <button onclick="editPendingStudent(${index})" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                            <button onclick="deletePendingStudent(${index})" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>`;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
-        });
-
-        // Usuarios
-        localforage.getItem('pendingUsers').then(users => {
-            users = users || [];
-            const tbody = document.getElementById('pendingUsersList');
-            tbody.innerHTML = '';
-
-            users.forEach((user, index) => {
-                const badgeColor = user.rol === 'admin' ? 'bg-primary' : 'bg-success';
-                const row = `
-                    <tr>
-                        <td>${user.username}</td>
-                        <td>${user.nombre}</td>
-                        <td><span class="badge ${badgeColor}">${user.rol}</span></td>
-                        <td>
-                            <button onclick="sendPendingUser(${index})" class="btn btn-success btn-sm">
-                                <i class="fas fa-cloud-upload-alt"></i> Enviar
-                            </button>
-                            <button onclick="editPendingUser(${index})" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                            <button onclick="deletePendingUser(${index})" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>`;
-                tbody.insertAdjacentHTML('beforeend', row);
-            });
-        });
-    }
-
-    // Mantener el resto de tus funciones JavaScript sin cambios
-    // [Aquí irían las funciones sendPendingStudent, editPendingStudent, etc.]
-</script>
+<script src="/js/listaUsuariosPendientes.js"></script>
 
 </body>
 </html>

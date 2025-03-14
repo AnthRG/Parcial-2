@@ -4,59 +4,31 @@ const openSidebarBtn = document.getElementById('openSidebar');
 const closeSidebarBtn = document.getElementById('closeSidebar');
 const overlayMenu = document.getElementById('overlayMenu');
 
-// Abrir y cerrar el overlay del menú
-openSidebarBtn.addEventListener('click', () => {
-    overlayMenu.classList.remove('-translate-x-full');
-    overlayMenu.classList.add('translate-x-0');
-});
-closeSidebarBtn.addEventListener('click', () => {
-    overlayMenu.classList.remove('translate-x-0');
-    overlayMenu.classList.add('-translate-x-full');
-});
-
+// Función modificada para crear filas de tabla
 function loadPendingRecordsDashboard() {
-    // Estudiantes pendientes
     localforage.getItem('surveyData').then(students => {
-        students = students || [];
-        const list = document.getElementById('pendingStudentsList');
-        list.innerHTML = '';
-        students.forEach((student, index) => {
-            const li = document.createElement('li');
-            li.className = 'p-4 border-b';
-            li.innerHTML = `
-        <div>
-          <strong>Nombre:</strong> ${student.nombre}<br>
-          <strong>Sector:</strong> ${student.sector}<br>
-          <strong>Nivel:</strong> ${student.nivelEscolar}
-        </div>
-        <div class="mt-2">
-          <button onclick="sendPendingStudent(${index})" class="bg-green-500 text-white px-2 py-1 rounded">Enviar</button>
-          <button onclick="editPendingStudent(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
-          <button onclick="deletePendingStudent(${index})" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
-        </div>`;
-            list.appendChild(li);
-        });
-    });
-    // Usuarios pendientes
-    localforage.getItem('pendingUsers').then(users => {
-        users = users || [];
-        const list = document.getElementById('pendingUsersList');
-        list.innerHTML = '';
-        users.forEach((user, index) => {
-            const li = document.createElement('li');
-            li.className = 'p-4 border-b';
-            li.innerHTML = `
-        <div>
-          <strong>Usuario:</strong> ${user.username}<br>
-          <strong>Nombre:</strong> ${user.nombre}<br>
-          <strong>Rol:</strong> ${user.rol}
-        </div>
-        <div class="mt-2">
-          <button onclick="sendPendingUser(${index})" class="bg-green-500 text-white px-2 py-1 rounded">Enviar</button>
-          <button onclick="editPendingUser(${index})" class="bg-yellow-500 text-white px-2 py-1 rounded">Editar</button>
-          <button onclick="deletePendingUser(${index})" class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
-        </div>`;
-            list.appendChild(li);
+        const tbody = document.getElementById('pendingStudentsList');
+        tbody.innerHTML = '';
+
+        (students || []).forEach((student, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${student.nombre}</td>
+                    <td>${student.sector}</td>
+                    <td>${student.nivelEscolar}</td>
+                    <td>
+                        <button onclick="sendPendingStudent(${index})" class="btn btn-success btn-sm">
+                            <i class="fas fa-cloud-upload-alt"></i> Enviar
+                        </button>
+                        <button onclick="editPendingStudent(${index})" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i>Editar
+                        </button>
+
+                        <button onclick="deletePendingStudent(${index})" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>`;
         });
     });
 }
@@ -81,7 +53,7 @@ function sendPendingStudent(index) {
 }
 
 function editPendingStudent(index) {
-    window.location.href = "/estudiantes/crear?editPending=" + index;
+    window.location.href = "/crud-estudiante/crear?editPending=" + index;
 }
 
 function deletePendingStudent(index) {
@@ -92,5 +64,5 @@ function deletePendingStudent(index) {
     }).then(() => loadPendingRecordsDashboard());
 }
 
-
 window.addEventListener('load', loadPendingRecordsDashboard);
+

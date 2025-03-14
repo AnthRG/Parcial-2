@@ -2,23 +2,18 @@
 
 // Animación de entrada del formulario
 window.addEventListener('load', () => {
+    setTimeout(() => {
+        const formulario = document.getElementById("formulario");
+        formulario.classList.remove("opacity-0", "translate-y-10");
+        formulario.classList.add("opacity-100", "translate-y-0");
+    }, 100);
+
     // Si no estamos en modo edición, se obtiene la ubicación
     if (!getIsEditMode()) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    document.getElementById('latitud').value = position.coords.latitude;
-                    document.getElementById('longitud').value = position.coords.longitude;
-                },
-                error => {
-                    console.error("Error obteniendo ubicación: ", error);
-                    // Opcional: Mostrar mensaje al usuario
-                    alert("Debes permitir la ubicación para registrar al estudiante.");
-                }
-            );
-        } else {
-            alert("Tu navegador no soporta geolocalización.");
-        }
+        navigator.geolocation.getCurrentPosition(position => {
+            document.getElementById('latitud').value = position.coords.latitude.toFixed(6);
+            document.getElementById('longitud').value = position.coords.longitude.toFixed(6);
+        });
     }
     cargarRegistroPendienteEstudiante();
 });
@@ -31,7 +26,7 @@ function getIsEditMode() {
 
 // Guardado offline: se guarda en LocalForage y se redirige al dashboard.
 document.getElementById('estudianteForm').addEventListener('submit', function (e) {
-    if (navigator.onLine) {
+    if (!navigator.onLine) {
         e.preventDefault();
         const formData = {
             nombre: document.querySelector('[name="nombre"]').value,
@@ -52,7 +47,7 @@ document.getElementById('estudianteForm').addEventListener('submit', function (e
             return localforage.setItem('surveyData', records);
         }).then(() => {
             alert("Datos guardados offline. Se sincronizarán desde el dashboard.");
-            window.location.href = "/crud-estudiante/pendientes";
+            window.location.href = "/dashboard";
         });
     }
 });
