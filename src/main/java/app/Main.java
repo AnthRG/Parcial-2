@@ -150,6 +150,7 @@ public class Main {
         app.get("/login", ctx -> ctx.redirect("/formulario"));
         app.get("/formulario", ctx -> ctx.render("/formulario.html"));
         app.get("/registro", ctx -> ctx.render("registro.html"));
+        app.get("/mainpage", ctx -> ctx.redirect("/index.html"));
 
 
         app.get("/logout", ctx -> {

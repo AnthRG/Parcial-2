@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EncuestasApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: url('3209.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #1A1A50, #000033);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar-brand .highlight {
+            color: #A020F0;
+        }
+        .logout-btn {
+           color: #6A0DAD; /* Morado claro, más suave que el fosforescente */
+           text-decoration: none;
+           font-size: 1.2rem;
+           font-weight: bold;
+           padding: 8px 16px; /* Espaciado dentro del botón */
+           border: 2px solid #6A0DAD; /* Borde morado */
+           border-radius: 5px; /* Bordes redondeados */
+           transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+}
+
+       .logout-btn:hover {
+          color: #FFFFFF; /* Cambia el color del texto a blanco al hacer hover */
+          background-color: #6A0DAD; /* Fondo morado cuando pasa el mouse */
+          border-color: #4B0082; /* Cambia el color del borde a un morado más oscuro */
+}
+
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .grid-item {
+            background-color: rgba(90, 45, 130, 0.8);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px; /* Más largos */
+        }
+
+        .grid-item i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .grid-item span {
+            display: block; /* Para que el texto quede en una línea nueva */
+            line-height: 1.4; /* Espaciado entre líneas */
+        }
+
+        .grid-item:hover {
+            background-color: rgba(160, 32, 240, 0.8);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas también en móviles */
+            }
+
+            .grid-item {
+                padding: 25px 15px;
+                font-size: 1.3rem;
+                min-height: 130px;
+            }
+
+            .grid-item i {
+                font-size: 2rem;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 1.2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand" href="#"><span>Encuest</span><span class="highlight">APP</span></a>
+    <a href="#" class="logout-btn">Salir</a>
+</nav>
+
+<div class="content">
+    <h1>Bienvenido a EncuestAPP</h1>
+    <p>Seleccione una opción:</p>
+    <div class="grid-container">
+        <div class="grid-item">
+            <i class="fas fa-poll"></i> 📊
+            <span>Realizar</span>
+            <span>Encuesta</span>
+        </div>
+        <div class="grid-item">
+            <i class="fas fa-user-clock"></i> ⏳
+            <span>Encuestados</span>
+            <span>Pendientes</span>
+        </div>
+        <div class="grid-item">
+            <i class="fas fa-list"></i> 📋
+            <span>Encuestas</span>
+            <span>Registradas</span>
+        </div>
+        <div class="grid-item">
+            <i class="fas fa-users-cog"></i> 👥
+            <span>Administrar</span>
+            <span>Usuarios</span>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    ✰ Derechos reservados al Grupo 04 ✰
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
