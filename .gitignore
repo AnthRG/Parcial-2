@@ -46,3 +46,5 @@ bin/
 
 ### Idea ###
 .idea/
+/.idea/
+/database/

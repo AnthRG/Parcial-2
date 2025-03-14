@@ -1,9 +1,14 @@
 package app;
 
 import app.controllers.*;
+import app.entidades.Estudiante;
 import app.entidades.Foto;
 import app.entidades.Usuario;
 import app.servicios.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.apibuilder.ApiBuilder;
 import io.javalin.http.Context;
@@ -80,7 +85,9 @@ public class Main {
                     ApiBuilder.get("/", EstudianteCrudController::listar);
                     ApiBuilder.get("/crear", EstudianteCrudController::crearEstudianteForm);
                     post("/crear", EstudianteCrudController::procesarCreacionEstudiante);
-
+                    ApiBuilder.get("/pendientes", ctx->{
+                        ctx.render("/pendientes/EstudiantePendiente.html");
+                    });
 
                 });
 
@@ -104,27 +111,47 @@ public class Main {
             });
         }).start(7070);
 
-        app.ws("/websocket", ws -> {
-            ws.onConnect(ctx -> {
-                wsClients.add(ctx);
-                System.out.println("Cliente Conectado: "+ ctx.sessionId());
-
-            });
-
+        app.ws("/sync", ws -> {
             ws.onMessage(ctx -> {
-                System.out.println("Mensaje recibido: " + ctx.message());
-                // Reenviar el mensaje a todos los clientes conectados
-                wsClients.forEach(client -> client.send(ctx.message()));
+                try {
+                    Gson gson = new Gson();
+                    // Se parsea el mensaje como JsonObject para extraer la información necesaria
+                    JsonObject jsonObject = gson.fromJson(ctx.message(), JsonObject.class);
+                    String type = jsonObject.get("type").getAsString();
+
+                    if ("sync".equalsIgnoreCase(type)) {
+                        JsonArray dataArray = jsonObject.getAsJsonArray("data");
+                        for (JsonElement element : dataArray) {
+                            JsonObject obj = element.getAsJsonObject();
+
+                            String nombre = obj.get("nombre").getAsString();
+                            String sector = obj.get("sector").getAsString();
+                            String nivelEscolarStr = obj.get("nivelEscolar").getAsString();
+
+                            String usuarioRegistro = (obj.has("usuarioRegistro") && !obj.get("usuarioRegistro").getAsString().isEmpty())
+                                    ? obj.get("usuarioRegistro").getAsString() : "offline";
+                            Usuario user = UsuarioServices.getInstance().find(usuarioRegistro);
+                            double latitud = obj.get("latitud").getAsDouble();
+                            double longitud = obj.get("longitud").getAsDouble();
+
+                            // Crear Estudiante (sin latitud y longitud)
+                            Estudiante estudiante = new Estudiante(nombre,
+                                    sector,
+                                    nivelEscolarStr,
+                                    user,
+                                    latitud,
+                                    longitud
+                            );
+                            EstudianteServices.getInstance().crear(estudiante);
+                        }
+                    }
+                    ctx.send("{\"status\": \"success\"}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ctx.send("{\"status\": \"error\"}");
+                }
             });
 
-            ws.onClose(ctx -> {
-                wsClients.remove(ctx);
-                System.out.println("Cliente desconectado: ");
-            });
-
-            ws.onError(ctx -> {
-                System.out.println("Error en WebSocket: ");
-            });
         });
 
         app.before(ctx -> {

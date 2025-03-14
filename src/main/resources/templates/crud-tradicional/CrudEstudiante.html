@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Registrar Estudiante</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <!-- FontAwesome para iconos -->
@@ -113,7 +114,7 @@
 <body>
 <div class="form-container">
   <h2><i class="fas fa-user-plus"></i> Registrar Estudiante</h2>
-  <form th:action="@{${accion}}" method="post">
+  <form th:action="@{${accion}}" id="estudianteForm" method="post">
     <!-- Campo Nombre -->
     <div class="form-group icon-input">
       <i class="fas fa-user"></i>
@@ -159,24 +160,9 @@
   };
 
   function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-              position => {
-                document.getElementById('latitud').value = position.coords.latitude;
-                document.getElementById('longitud').value = position.coords.longitude;
-              },
-              error => {
-                console.error("Error obteniendo ubicación: ", error);
-                // Opcional: Mostrar mensaje al usuario
-                alert("Debes permitir la ubicación para registrar al estudiante.");
-              }
-      );
-    } else {
-      alert("Tu navegador no soporta geolocalización.");
-    }
+
   }
 </script>
-<script src="/publico/js/offlineSync.js"></script>
-<script src="/publico/js/syncWorker.js"></script>
+<script src="/js/formulario-estudiante.js"></script>
 </body>
 </html>
