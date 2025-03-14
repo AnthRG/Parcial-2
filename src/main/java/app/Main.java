@@ -70,6 +70,7 @@ public class Main {
             config.staticFiles.add("/publico"); // Archivos estáticos
             config.fileRenderer(new JavalinThymeleaf(templateEngine)); // Configurar Thymeleaf
 
+
             config.router.apiBuilder(() -> {
                 ApiBuilder.path("/crud-simple", () -> {
                     ApiBuilder.get("/", CrudUsuarioController::listar);
@@ -88,6 +89,7 @@ public class Main {
                     ApiBuilder.get("/pendientes", ctx->{
                         ctx.render("/pendientes/EstudiantePendiente.html");
                     });
+
 
                 });
 
@@ -154,6 +156,7 @@ public class Main {
 
         });
 
+
         app.before(ctx -> {
             if (ctx.sessionAttribute("USUARIO") == null) { // Si no hay sesión activa
                 Cookie[] cookies = ctx.req().getCookies();
@@ -174,10 +177,30 @@ public class Main {
                 }
             }
         });
+
+        app.before("/", ctx -> {
+            if (ctx.sessionAttribute("USUARIO") == null) {
+                ctx.redirect("/formulario");
+            }
+        });
+
+        app.before("/crud-simple*", ctx -> {
+            if (!SessionCheckAdmin(ctx)) {
+                ctx.redirect("/");
+            }
+        });
+
+        app.before("/crud-estudiante*", ctx -> {
+            if (!SessionCheckEncuestador(ctx) && !SessionCheckAdmin(ctx)) {
+                ctx.redirect("/");
+            }
+        });
+
         app.get("/login", ctx -> ctx.redirect("/formulario"));
         app.get("/formulario", ctx -> ctx.render("/formulario.html"));
         app.get("/registro", ctx -> ctx.render("registro.html"));
-        app.get("/mainpage", ctx -> ctx.redirect("/index.html"));
+        app.get("/", ctx -> ctx.render("index.html"));
+
 
 
         app.get("/logout", ctx -> {
@@ -285,6 +308,12 @@ public class Main {
 
     }
 
+
+    private static boolean SessionCheckEncuestador(Context ctx) {
+        Usuario user = ctx.sessionAttribute("USUARIO");
+        return user != null && user.isEncuestador();
+    }
+
     private static boolean SessionCheck(Context ctx) {
         Usuario user = ctx.sessionAttribute("USUARIO");
 
@@ -313,16 +342,7 @@ public class Main {
     }
 
 
-    private static boolean SessionCheckAutor(Context ctx) {
-        Usuario user = ctx.sessionAttribute("USUARIO");
-        if (user != null) {
-            ctx.sessionAttribute("USUARIO", user);
-            if (user.isEncuestador() || user.isAdministrador()) {
-                return true;
-            }
-        }
-        return false; // No hay sesión ni cookie válida
-    }
+
 
     private static boolean SessionCheckAdmin(Context ctx) {
         Usuario user = ctx.sessionAttribute("USUARIO");

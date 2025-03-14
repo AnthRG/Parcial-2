@@ -31,7 +31,6 @@ function getIsEditMode() {
 
 // Guardado offline: se guarda en LocalForage y se redirige al dashboard.
 document.getElementById('estudianteForm').addEventListener('submit', function (e) {
-    if (navigator.onLine) {
         e.preventDefault();
         const formData = {
             nombre: document.querySelector('[name="nombre"]').value,
@@ -54,7 +53,7 @@ document.getElementById('estudianteForm').addEventListener('submit', function (e
             alert("Datos guardados offline. Se sincronizarán desde el dashboard.");
             window.location.href = "/crud-estudiante/pendientes";
         });
-    }
+
 });
 
 // Cargar registro pendiente para edición (si existe el parámetro editPending)
