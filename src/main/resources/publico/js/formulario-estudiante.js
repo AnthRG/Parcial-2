@@ -50,7 +50,6 @@ document.getElementById('estudianteForm').addEventListener('submit', function (e
             }
             return localforage.setItem('surveyData', records);
         }).then(() => {
-            alert("Datos guardados offline. Se sincronizarán desde el dashboard.");
             window.location.href = "/crud-estudiante/pendientes";
         });
 

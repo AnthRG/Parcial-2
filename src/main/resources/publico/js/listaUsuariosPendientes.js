@@ -1,9 +1,5 @@
 // js/listarUsuariosPendientes.js
 
-const openSidebarBtn = document.getElementById('openSidebar');
-const closeSidebarBtn = document.getElementById('closeSidebar');
-const overlayMenu = document.getElementById('overlayMenu');
-
 // Función modificada para crear filas de tabla
 function loadPendingRecordsDashboard() {
     localforage.getItem('surveyData').then(students => {
