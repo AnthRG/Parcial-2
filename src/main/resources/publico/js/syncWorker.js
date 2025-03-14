@@ -1,39 +1,50 @@
-// syncWorker.js
+//syncWorker
 
-// Escucha el evento que indica que la conexión se ha restablecido
-window.addEventListener('online', function() {
-    console.log("Conexión restablecida. Intentando sincronizar datos...");
+self.importScripts('https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.min.js');
 
-    // Recupera los datos guardados (si los hay)
-    let storedData = JSON.parse(localStorage.getItem('offlineData')) || [];
-    if (storedData.length > 0) {
-        storedData.forEach(data => {
-            // Construir el cuerpo de la petición en formato URL encoded
-            let params = new URLSearchParams();
-            params.append("nombre", data.nombre);
-            params.append("sector", data.sector);
-            params.append("nivelEscolar", data.nivelEscolar);
-            params.append("latitud", data.latitud);
-            params.append("longitud", data.longitud);
+function syncData() {
+    const ws = new WebSocket('ws://localhost:7000/sync');
 
-            // Realiza la petición al servidor (ajusta la URL según corresponda)
-            fetch('/procesar-estudiante', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: params.toString()
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log("Datos sincronizados correctamente:", data);
-                    } else {
-                        console.error("Error al sincronizar datos:", data);
-                    }
-                })
-                .catch(error => console.error("Error en la sincronización:", error));
+    ws.onopen = () => {
+        // Sincronizar estudiantes pendientes
+        localforage.getItem('surveyData').then(data => {
+            if (data && data.length > 0) {
+                const cleanedData = data.map(estudiante => ({
+                    ...estudiante,
+                    latitud: estudiante.latitud === "" ? 0.0 : parseFloat(estudiante.latitud),
+                    longitud: estudiante.longitud === "" ? 0.0 : parseFloat(estudiante.longitud)
+                }));
+                ws.send(JSON.stringify({type: 'syncStudents', data: cleanedData}));
+            }
         });
-        // Limpia los datos una vez intentada la sincronización
-        localStorage.removeItem('offlineData');
+        // Sincronizar usuarios pendientes (opcional)
+        localforage.getItem('pendingUsers').then(data => {
+            if (data && data.length > 0) {
+                ws.send(JSON.stringify({type: 'syncUsers', data: data}));
+            }
+        });
+    };
+
+    ws.onmessage = (event) => {
+        const response = JSON.parse(event.data);
+        if (response.status === 'success') {
+            if (response.type === 'syncStudents') {
+                localforage.removeItem('surveyData');
+            }
+            if (response.type === 'syncUsers') {
+                localforage.removeItem('pendingUsers');
+            }
+        }
+    };
+
+    ws.onerror = () => {
+        // Reintentar después de 5 segundos si hay error en la conexión
+        setTimeout(syncData, 5000);
+    };
+}
+
+self.addEventListener('message', (e) => {
+    if (e.data === 'sync') {
+        syncData();
     }
 });
