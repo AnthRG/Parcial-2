@@ -50,7 +50,8 @@ document.getElementById('estudianteForm').addEventListener('submit', function (e
             }
             return localforage.setItem('surveyData', records);
         }).then(() => {
-            window.location.href = "/crud-estudiante/pendientes";
+            window.location.href = "/crud-estudiante/crear" +
+                "";
         });
 
 });
