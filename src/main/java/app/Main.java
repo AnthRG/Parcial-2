@@ -86,8 +86,13 @@ public class Main {
                     ApiBuilder.get("/", EstudianteCrudController::listar);
                     ApiBuilder.get("/crear", EstudianteCrudController::crearEstudianteForm);
                     post("/crear", EstudianteCrudController::procesarCreacionEstudiante);
-                    ApiBuilder.get("/pendientes", ctx->{
-                        ctx.render("pendientes/EstudiantePendiente.html");
+                    ApiBuilder.get("/pendientes", ctx -> {
+                        try {
+                            ctx.regnder("pendientes/EstudiantePendiente.html");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ctx.status(500).result("Error interno en la vista de pendientes.");
+                        }
                     });
 
 
