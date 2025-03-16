@@ -87,7 +87,7 @@ public class Main {
                     ApiBuilder.get("/crear", EstudianteCrudController::crearEstudianteForm);
                     post("/crear", EstudianteCrudController::procesarCreacionEstudiante);
                     ApiBuilder.get("/pendientes", ctx->{
-                        ctx.render("/pendientes/EstudiantePendiente.html");
+                        ctx.render("pendientes/EstudiantePendiente.html");
                     });
 
 
