@@ -88,7 +88,7 @@ public class Main {
                     post("/crear", EstudianteCrudController::procesarCreacionEstudiante);
                     ApiBuilder.get("/pendientes", ctx -> {
                         try {
-                            ctx.render("pendientes/EstudiantePendiente.html");
+                            ctx.render("Pendientes/EstudiantePendiente.html");
                         } catch (Exception e) {
                             e.printStackTrace();
                             ctx.status(500).result("Error interno en la vista de pendientes.");
