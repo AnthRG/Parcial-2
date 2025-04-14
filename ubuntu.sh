@@ -24,21 +24,6 @@ sdk install java 21.0.3-tem
 # Subiendo el servicio de Apache.
 sudo service apache2 start
 
-# Clonando el repositorio.
-git clone https://github.com/vacax/virtualhost-proxyreverso
-
-# Copiando los archivos de configuración en la ruta indicada.
-sudo cp ~/virtualhost-proxyreverso/configuraciones/virtualhost.conf /etc/apache2/sites-available/
-sudo cp ~/virtualhost-proxyreverso/configuraciones/seguro.conf /etc/apache2/sites-available/
-sudo cp ~/virtualhost-proxyreverso/configuraciones/proxyreverso.conf /etc/apache2/sites-available/
-
-# Creando las estructuras de los archivos.
-sudo mkdir -p /var/www/html/app1 /var/www/html/app2
-
-# Creando los archivos por defecto.
-printf "<h1>Sitio Aplicacion #1</h1>" | sudo tee /var/www/html/app1/index.html
-printf "<h1>Sitio Aplicacion #2</h1>" | sudo tee /var/www/html/app2/index.html
-
 # Clonando el proyecto ORM y moviendo a la carpeta descargada.
 cd ~/
 git clone https://github.com/AnthRG/ApacheReady.git
@@ -91,4 +76,4 @@ nohup java -jar ~/ApacheReady/proyecto-final/build/libs/app.jar > ~/ApacheReady/
 ./gradlew shadowjar
 
 # Subiendo la aplicación puerto por defecto.
-java -jar ~/Parcial-2/build/libs/app.jar > ~/Parcial-2/build/libs/salida.txt 2> ~/Parcial-2/build/libs/error.txt &
+java -jar ~/ApacheReady/proyecto-final/build/libs/app.jar > ~/ApacheReady/proyecto-final/build/libs/salida.txt 2> ~/ApacheReady/proyecto-final/build/libs/error.txt &
